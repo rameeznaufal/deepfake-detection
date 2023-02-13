@@ -7,12 +7,17 @@ from scipy.spatial import distance as dist
 from imutils.video import FileVideoStream
 from imutils import face_utils
 from threading import Thread
+from datetime import timedelta
 import numpy as np
+import sys
 import argparse
 import imutils
 import time
 import dlib
 import cv2
+
+def print_error(*args, **kwargs):
+	    print(*args, file=sys.stderr, **kwargs)
 
 def mouth_aspect_ratio(mouth):
 	# compute the euclidean distances between the two sets of
@@ -52,22 +57,38 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 
 # start the video stream thread
 print("[INFO] starting video stream thread...")
-fvs = FileVideoStream(path=args["video"]).start()
+fvs = cv2.VideoCapture(args["video"])
+
+video_name = args["video"].split(".")[0].split("/")[1]
+
 time.sleep(1.0)
 
 frame_width = 640
 frame_height = 360
 
 # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-out = cv2.VideoWriter('outpy.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 30, (frame_width,frame_height))
+out = cv2.VideoWriter('Output/output.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 30, (frame_width,frame_height))
 time.sleep(1.0)
+FPS = fvs.get(cv2.CAP_PROP_FPS)
 
+# Opening file to write the timestamps for closed mouth frames 
+f = open(f"Output/{video_name}_frames.txt", 'a')
+
+frame_count = 0
 # loop over frames from the video stream
-while True:
-	# grab the frame from the threaded video file stream, resize
+while fvs.isOpened():
+    	# grab the frame from the threaded video file stream, resize
 	# it, and convert it to grayscale
 	# channels)
-	frame = fvs.read()
+	ret, frame = fvs.read()
+	frame_count += 1
+
+	time_stamp = timedelta(seconds = (frame_count/FPS))
+
+	if not ret:
+		print_error("Can't recieve frame (Stream end?), Exiting...")
+		break
+
 	frame = imutils.resize(frame, width=640)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -99,10 +120,12 @@ while True:
 		if mar > MOUTH_AR_THRESH:
 			cv2.putText(frame, "Mouth is Open!", (30,60),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255),2)
+		else :
+			f.write(f"[{time_stamp}] - {mar} \n")
 	# Write the frame into the file 'output.avi'
 	out.write(frame)
 	# show the frame
-	cv2.imshow("Frame", frame)
+	# cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
 	# if the `q` key was pressed, break from the loop
@@ -112,3 +135,4 @@ while True:
 # do a bit of cleanup
 cv2.destroyAllWindows()
 fvs.stop()
+f.close()

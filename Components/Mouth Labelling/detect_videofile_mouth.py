@@ -44,7 +44,7 @@ ap.add_argument("-v", "--video", default="trump.mp4",
 args = vars(ap.parse_args())
 
 # define one constants, for mouth aspect ratio to indicate open mouth
-MOUTH_AR_THRESH = 0.6
+MOUTH_AR_THRESH = 0.65
 
 # initialize dlib's face detector (HOG-based) and then create
 # the facial landmark predictor
@@ -67,7 +67,7 @@ frame_width = 640
 frame_height = 360
 
 # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-out = cv2.VideoWriter('Output/output.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 30, (frame_width,frame_height))
+out = cv2.VideoWriter('Output/rez.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 30, (frame_width,frame_height))
 time.sleep(1.0)
 FPS = fvs.get(cv2.CAP_PROP_FPS)
 
@@ -118,14 +118,17 @@ while fvs.isOpened():
 
         # Draw text if mouth is open
 		if mar > MOUTH_AR_THRESH:
-			cv2.putText(frame, "Mouth is Open!", (30,60),
-			cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255),2)
+			pass
+			#cv2.putText(frame, "Mouth is Open!", (30,60),
+			#cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255),2)
 		else :
+			cv2.putText(frame, "Mouth is Closed!", (30,60),
+			cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255),2)
 			f.write(f"[{time_stamp}] - {mar} \n")
 	# Write the frame into the file 'output.avi'
 	out.write(frame)
 	# show the frame
-	# cv2.imshow("Frame", frame)
+	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
 	# if the `q` key was pressed, break from the loop
@@ -134,5 +137,5 @@ while fvs.isOpened():
 
 # do a bit of cleanup
 cv2.destroyAllWindows()
-fvs.stop()
+#fvs.stop()
 f.close()

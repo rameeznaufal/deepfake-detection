@@ -1,5 +1,14 @@
 README.md
 setup.py
+components/__init__.py
+components/p2fa_py3/__init__.py
+components/p2fa_py3/setup.py
+components/p2fa_py3/p2fa/__init__.py
+components/p2fa_py3/p2fa/align.py
+components/p2fa_py3/tests/__init__.py
+components/p2fa_py3/tests/test_p2fa.py
+components/phoneme_extraction/__init__.py
+components/phoneme_extraction/speech2text.py
 deepfake_detector.egg-info/PKG-INFO
 deepfake_detector.egg-info/SOURCES.txt
 deepfake_detector.egg-info/dependency_links.txt

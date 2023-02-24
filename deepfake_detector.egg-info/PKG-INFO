@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: deepfake-detector
+Version: 0.0.1
+Summary: Deepfake Detection based on Audio-Visual Mismatch
+Home-page: UNKNOWN
+Author: 
+Author-email: 
+License: UNKNOWN
+Description: # deepfake-detection
+        Deepfake detection based on audio-visual mismatch | B.tech capstone project
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: Linux
+Description-Content-Type: text/markdown

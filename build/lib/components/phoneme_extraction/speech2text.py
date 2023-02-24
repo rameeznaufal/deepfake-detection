@@ -4,13 +4,7 @@ import librosa
 import numpy as np
 from transformers import Wav2Vec2ForCTC, Wav2Vec2Tokenizer
 
-def vid2speech_transcription(video_path):
-    # Insert Local Video File Path 
-    clip = mp.VideoFileClip(video_path)
-    
-    # Insert Local Audio File Path
-    audio_path = video_path.replace('.mp4', '.wav')
-    clip.audio.write_audiofile(audio_path)
+def speech_transcription(audio_path):
 
     # Load Wav2Vec2 model and tokenizer
     tokenizer = Wav2Vec2Tokenizer.from_pretrained("facebook/wav2vec2-base-960h")

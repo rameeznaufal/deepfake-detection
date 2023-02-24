@@ -1,5 +1,14 @@
 README.md
 setup.py
+Components/__init__.py
+Components/Phoneme_Extraction/__init__.py
+Components/Phoneme_Extraction/speech2text.py
+Components/p2fa_py3/__init__.py
+Components/p2fa_py3/setup.py
+Components/p2fa_py3/p2fa/__init__.py
+Components/p2fa_py3/p2fa/align.py
+Components/p2fa_py3/tests/__init__.py
+Components/p2fa_py3/tests/test_p2fa.py
 components/__init__.py
 components/p2fa_py3/__init__.py
 components/p2fa_py3/setup.py

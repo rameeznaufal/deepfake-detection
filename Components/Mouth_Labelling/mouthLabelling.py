@@ -11,7 +11,6 @@ import os
 # frams_path is the path to the directory containing all the captured frames
 def mouth_aspect_ratio(frames_path):
     # define one constants, for mouth aspect ratio to indicate open mouth
-    MOUTH_AR_THRESH = 0.65
     mar = []
 
     # initialize dlib's face detector (HOG-based) and then create

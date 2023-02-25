@@ -1,8 +1,13 @@
 README.md
 setup.py
 Components/__init__.py
+Components/Mouth_Labelling/__init__.py
+Components/Mouth_Labelling/detect_videofile_mouth.py
+Components/Mouth_Labelling/mouthLabelling.py
 Components/Phoneme_Extraction/__init__.py
 Components/Phoneme_Extraction/speech2text.py
+Components/Viseme_Extraction/__init__.py
+Components/Viseme_Extraction/viseme.py
 Components/p2fa_py3/__init__.py
 Components/p2fa_py3/setup.py
 Components/p2fa_py3/p2fa/__init__.py

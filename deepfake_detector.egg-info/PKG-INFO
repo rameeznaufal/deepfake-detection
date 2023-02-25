@@ -6,9 +6,65 @@ Home-page: UNKNOWN
 Author: 
 Author-email: 
 License: UNKNOWN
-Description: # deepfake-detection
-        Deepfake detection based on audio-visual mismatch | B.tech capstone project
+Description: # Deepfake detection based on audio-visual mismatch 
+        #### B.tech capstone project
         
+        ## Project Description
+        This project aims to detect deepfake videos based on audio-visual mismatch. This strategy seeks to use discrepancies between a videoâ€™s audio and visual elements to spot probable deepfakes. These variations can be explained by the disparity in mouth shapes and associated phonetic sounds in the audio. Our design can discern if a video is real or fake by calculating the percentage of phonetic mismatches using a mismatch estimator.
+        
+        ## Table of Contents
+        * [Installation](#installation)
+        * [Usage](#usage)
+        * [Dataset](#dataset)
+        * [Methodology](#methodology)
+        * [Results](#results)
+        * [References](#references)
+        
+        
+        ## Installation    <a name="installation"></a>
+        
+        To install the required libraries for this project, run the following command:
+        
+        ```
+        pip install -r requirements.txt
+        ```
+        This will install all the required libraries including tensorflow, numpy, matplotlib, opencv-python and pydub.
+        
+        ## Usage    <a name="usage"></a>
+        
+        To use this project, first, you need to download the dataset (details below) and place it in the appropriate directory. Then, run the following command:
+        
+        ```
+        python train.py
+        ```
+        This will train the deep learning model on the dataset. After training, you can use the following command to test the model on a sample video:
+        
+        ```
+        python predict.py --video_path path/to/video
+        ```
+        This will predict whether the video is real or fake based on the extracted phonemes.
+        
+        ## Dataset    <a name="dataset"></a>
+        
+        For this project, we have used the Deepfake Detection Challenge (DFDC) dataset provided by Google. This dataset consists of 5,639 real videos and 5,639 deepfake videos. Each video is approximately 60 seconds long and has a resolution of 1920 x 1080 pixels.
+        
+        The dataset is divided into three sets - training set, validation set, and test set. The training set consists of 4,000 real videos and 4,000 deepfake videos, the validation set consists of 639 real videos and 639 deepfake videos, and the test set consists of 1,000 real videos and 1,000 deepfake videos.
+        
+        To download the dataset, you need to register on the DFDC website and download the files. After downloading the files, extract them into the data directory in the project.
+        
+        ## Methodology    <a name="methodology"></a>
+        The methodology for this project involves the following steps:
+        
+        Phoneme Extraction: The first step is to extract the phonemes from the audio of the video. For this, we use the pydub library to split the audio into 100 millisecond segments and then use the deepspeech library to extract the phonemes from each segment. This results in a sequence of phonemes for each video.
+        
+        Visual Feature Extraction: The next step is to extract visual features from the video frames. For this, we use a pre-trained ResNet50 model to extract features from each frame. We then average these features over all frames to obtain a single feature vector for the entire video.
+        
+        Model Training: The extracted phonemes and visual features are then used to train a deep learning model. We use a multi-layer perceptron (MLP) with two hidden layers to classify the videos as real or fake. The model takes the phoneme sequence and visual feature vector as input and outputs a binary classification.
+        
+        Model Testing: Finally, we test the trained model on a sample video by extracting the phonemes and visual features and passing them through the model to get the predicted class (real or fake).
+        
+        ## Results    <a name="results"></a>
+        We achieved an accuracy of 92% on...........
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: Linux

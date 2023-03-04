@@ -112,9 +112,6 @@ termcolor==2.2.0
 TextGrid==1.5
 threadpoolctl==3.1.0
 tokenizers==0.13.2
-torch==1.13.1+cpu
-torchaudio==0.13.1+cpu
-torchvision==0.14.1+cpu
 tornado==6.2
 tqdm==4.65.0
 traitlets==5.5.0

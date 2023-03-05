@@ -2,3 +2,4 @@ venv
 #Mouth Labelling/Dataset/
 #Mouth Labelling/Output/
 deepfake-venv
+__pycache__/

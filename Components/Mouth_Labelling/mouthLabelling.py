@@ -1,4 +1,6 @@
 # import the necessary packages
+# MAR Threshold is 0.485
+
 from scipy.spatial import distance as dist
 from imutils import face_utils
 import numpy as np
@@ -9,6 +11,28 @@ import cv2
 import os
 
 # frams_path is the path to the directory containing all the captured frames
+def calculate_mar(mouth):
+    	# compute the euclidean distances between the two sets of
+	# vertical mouth landmarks (x, y)-coordinates
+	A = dist.euclidean(mouth[13], mouth[19]) # 62, 68
+	B = dist.euclidean(mouth[15], mouth[17]) # 64, 66
+	D = dist.euclidean(mouth[2], mouth[10]) # 51, 59
+	E = dist.euclidean(mouth[4], mouth[8]) # 53, 57
+
+	# compute the euclidean distance between the horizontal
+	# mouth landmark (x, y)-coordinates
+	C = dist.euclidean(mouth[0], mouth[6]) # 49, 55
+	F = dist.euclidean(mouth[12], mouth[16]) # 61, 65
+
+
+	# compute the mouth aspect ratio
+	mar = (A + B) / (F) + (D + E) / (2.0 * C)	
+		
+	# return the mouth aspect ratio
+	return mar
+
+
+
 def mouth_aspect_ratio(frames_path):
     # define one constants, for mouth aspect ratio to indicate open mouth
     mar = []
@@ -47,7 +71,7 @@ def mouth_aspect_ratio(frames_path):
 
                 # extract the mouth coordinates, then use the
                 # coordinates to compute the mouth aspect ratio
-                mouth = shape[mStart:mEnd]
-                mar.append([filename, (dist.euclidean(mouth[2], mouth[9]) + dist.euclidean(mouth[4], mouth[7])) / (2.0 * dist.euclidean(mouth[0], mouth[6]))])
+                mouth = shape[mStart-1:mEnd]
+                mar.append([filename, calculate_mar(mouth)])
 
     return mar

@@ -22,16 +22,21 @@ def print_error(*args, **kwargs):
 def mouth_aspect_ratio(mouth):
 	# compute the euclidean distances between the two sets of
 	# vertical mouth landmarks (x, y)-coordinates
-	A = dist.euclidean(mouth[2], mouth[9]) # 51, 59
-	B = dist.euclidean(mouth[4], mouth[7]) # 53, 57
+	A = dist.euclidean(mouth[13], mouth[19]) # 62, 68
+	B = dist.euclidean(mouth[15], mouth[17]) # 64, 66
+	D = dist.euclidean(mouth[2], mouth[10]) # 51, 59
+	E = dist.euclidean(mouth[4], mouth[8]) # 53, 57
 
 	# compute the euclidean distance between the horizontal
 	# mouth landmark (x, y)-coordinates
 	C = dist.euclidean(mouth[0], mouth[6]) # 49, 55
+	F = dist.euclidean(mouth[12], mouth[16]) # 61, 65
+
 
 	# compute the mouth aspect ratio
-	mar = (A + B) / (2.0 * C)
-
+	mar = (D + E) / (2.0 * C)
+	mar = (A + B) / (F) + (D + E) / (2.0 * C)	
+		
 	# return the mouth aspect ratio
 	return mar
 
@@ -44,7 +49,7 @@ ap.add_argument("-v", "--video", default="trump.mp4",
 args = vars(ap.parse_args())
 
 # define one constants, for mouth aspect ratio to indicate open mouth
-MOUTH_AR_THRESH = 0.65
+MOUTH_AR_THRESH = 0.485
 
 # initialize dlib's face detector (HOG-based) and then create
 # the facial landmark predictor
@@ -59,6 +64,9 @@ predictor = dlib.shape_predictor(args["shape_predictor"])
 print("[INFO] starting video stream thread...")
 fvs = cv2.VideoCapture(args["video"])
 
+args["video"].strip("/")
+args["video"].strip("\\")
+
 video_name = args["video"].split(".")[0].split("/")[1]
 
 time.sleep(1.0)
@@ -66,13 +74,19 @@ time.sleep(1.0)
 frame_width = 640
 frame_height = 360
 
-# Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-out = cv2.VideoWriter('Output/rez.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 30, (frame_width,frame_height))
-time.sleep(1.0)
+if(fvs.get(cv2.CAP_PROP_FRAME_WIDTH) < 640):
+	frame_width = int(fvs.get(cv2.CAP_PROP_FRAME_WIDTH))
+
+if(fvs.get(cv2.CAP_PROP_FRAME_HEIGHT) < 360):
+	frame_height = int(fvs.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
 FPS = fvs.get(cv2.CAP_PROP_FPS)
+# Define the codec and create VideoWriter object.The output is stored in '[video_name]_output.avi' file.
+out = cv2.VideoWriter(f"Output/{video_name}_output.avi", cv2.VideoWriter_fourcc('M','J','P','G'), FPS, (frame_width,frame_height))
+time.sleep(1.0)
 
 # Opening file to write the timestamps for closed mouth frames 
-f = open(f"Output/{video_name}_frames.txt", 'a')
+f = open(f"Output/{video_name}_frames.txt", 'w')
 
 frame_count = 0
 # loop over frames from the video stream
@@ -103,9 +117,16 @@ while fvs.isOpened():
 		shape = predictor(gray, rect)
 		shape = face_utils.shape_to_np(shape)
 
+		#print(len(shape))
+
 		# extract the mouth coordinates, then use the
 		# coordinates to compute the mouth aspect ratio
-		mouth = shape[mStart:mEnd]
+		mouth = shape[mStart-1:mEnd]
+
+		#[print(m) for m in mouth]
+
+		#print(len(mouth))
+
 		mar = mouth_aspect_ratio(mouth)
 
 		# compute the convex hull for the mouth, then
@@ -113,7 +134,7 @@ while fvs.isOpened():
 		mouthHull = cv2.convexHull(mouth)
 
 		cv2.drawContours(frame, [mouthHull], -1, (0, 255, 0), 1)
-		cv2.putText(frame, "MAR: {:.2f}".format(mar), (30, 30),
+		cv2.putText(frame, "MAR: {:.3f}".format(mar), (30, 30),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
         # Draw text if mouth is open
